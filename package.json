@@ -1,0 +1,30 @@
+{
+  "name": "node-kkutu",
+  "version": "1.0.0",
+  "description": "An unofficial kkutu automator using puppeteer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dollar3795/node-kkutu.git"
+  },
+  "keywords": [
+    "kkutu",
+    "node",
+    "javascript",
+	"typescript",
+    "puppeteer"
+  ],
+  "author": "Dollar3795",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Dollar3795/node-kkutu/issues"
+  },
+  "homepage": "https://github.com/Dollar3795/node-kkutu#readme",
+  "dependencies": {
+    "puppeteer-extra": "^3.2.3",
+    "puppeteer-extra-plugin-stealth": "^2.9.0"
+  }
+}
