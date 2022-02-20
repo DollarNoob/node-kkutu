@@ -8,7 +8,7 @@ var _this: any;
 
 export class Client extends EventEmitter {
     constructor() {
-		super();
+        super();
         _this = this;
     }
 
@@ -17,7 +17,8 @@ export class Client extends EventEmitter {
             _this.browser = await puppeteer.launch({"executablePath": executablePath, "headless": headless, "userDataDir": userDataDir}).catch(reject);
             _this.page = await _this.browser.newPage();
             await _this.browser.pages().then(pages => pages[0].close());
-            
+
+            // https://stackoverflow.com/a/57894554
             var session = await _this.page.target().createCDPSession();
             await session.send("Network.enable");
             await session.send("Page.enable");
@@ -32,6 +33,7 @@ export class Client extends EventEmitter {
                             payload = JSON.parse(params.response.payloadData);
                         }
                         catch {}
+                        // https://stackoverflow.com/a/59825174
                         if (!payload) return;
                         else if (payload.type === "conn" && payload.user.id === _this.accountData.id) {
                             mainWSId = params.requestId;
@@ -209,7 +211,7 @@ export class Client extends EventEmitter {
 
     sendChatMessage(message: string, inGame: boolean): Promise<any> {
         return new Promise(async function(resolve, reject) {
-            // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
+            // https://stackoverflow.com/a/21797381
             await _this.page.evaluate(function(sockets, wsURL, message) {
                 const bStr = atob(message);
                 const bLen = bStr.length;
@@ -224,14 +226,14 @@ export class Client extends EventEmitter {
 
 export declare interface Client {
     on(event: "connect", listener: (user: Object) => void): this;
-	on(event: "connectRoom", listener: (user: Object) => void): this;
+    on(event: "connectRoom", listener: (user: Object) => void): this;
     on(event: "disconnectRoom", listener: (user: Object) => void): this;
     on(event: "message", listener: (message: string) => void): this;
-	on(event: "gameStart", listener: (data: Object) => void): this;
-	on(event: "gameEnd", listener: (data: Object) => void): this;
-	on(event: "turnStart", listener: (data: Object) => void): this;
+    on(event: "gameStart", listener: (data: Object) => void): this;
+    on(event: "gameEnd", listener: (data: Object) => void): this;
+    on(event: "turnStart", listener: (data: Object) => void): this;
     on(event: "turnError", listener: (data: Object) => void): this;
-	on(event: "turnEnd", listener: (data: Object) => void): this;
+    on(event: "turnEnd", listener: (data: Object) => void): this;
     on(event: "roundStart", listener: (data: Object) => void): this;
     on(event: "roundEnd", listener: (data: Object) => void): this;
 }
