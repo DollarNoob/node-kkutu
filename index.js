@@ -267,10 +267,11 @@ var Client = /** @class */ (function (_super) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, (0, node_fetch_1["default"])("https://kkutu.co.kr/o/dict/" + encodeURIComponent(word) + "?lang=" + lang, {
+                        case 0: return [4 /*yield*/, (0, node_fetch_1["default"])("https://kkutu.co.kr/o/dict/".concat(encodeURIComponent(word), "?lang=").concat(lang), {
                                 "headers": {
                                     "Accept": "application/json, text/plain, */*",
                                     "Accept-Language": "en-US,en;q=0.9",
+                                    "Cookie": "kkuko=nodekkutu",
                                     "Referer": "https://kkutu.co.kr/o/game",
                                     "Referrer-Policy": "strict-origin-when-cross-origin"
                                 },
@@ -364,13 +365,13 @@ var Client = /** @class */ (function (_super) {
             });
         });
     };
-    Client.prototype.sendChatMessage = function (message, inGame) {
+    Client.prototype.sendChatMessage = function (message, inGame, isWord) {
         return new Promise(function (resolve, reject) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: 
-                        // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
+                        // https://stackoverflow.com/a/21797381
                         return [4 /*yield*/, _this.page.evaluate(function (sockets, wsURL, message) {
                                 var bStr = atob(message);
                                 var bLen = bStr.length;
@@ -378,9 +379,9 @@ var Client = /** @class */ (function (_super) {
                                 for (var i = 0; i < bLen; i++)
                                     bArr[i] = bStr.charCodeAt(i);
                                 sockets.find(function (socket) { return socket.url === wsURL; }).send(bArr.buffer);
-                            }, _this.sockets, inGame ? _this.gameWS : _this.mainWS, Buffer.from(Buffer.from("AgEyMTI0Mzk3MzI1AA==", "base64").toString("utf8") + message + Buffer.from("AA==", "base64").toString("utf8")).toString("base64"))["catch"](reject)];
+                            }, _this.sockets, inGame ? _this.gameWS : _this.mainWS, Buffer.from((isWord ? "\x02\x03" : "\x02\x01") + "\x00" + message + "\x00", "utf8").toString("base64"))["catch"](reject)];
                         case 1:
-                            // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
+                            // https://stackoverflow.com/a/21797381
                             _a.sent();
                             resolve(true);
                             return [2 /*return*/];
