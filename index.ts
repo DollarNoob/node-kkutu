@@ -123,6 +123,7 @@ export class Client extends EventEmitter {
                 "headers": {
                     "Accept": "application/json, text/plain, */*",
                     "Accept-Language": "en-US,en;q=0.9",
+                    "Cookie": "kkuko=nodekkutu",
                     "Referer": "https://kkutu.co.kr/o/game",
                     "Referrer-Policy": "strict-origin-when-cross-origin"
                 },
@@ -209,7 +210,7 @@ export class Client extends EventEmitter {
         });
     }
 
-    sendChatMessage(message: string, inGame: boolean): Promise<any> {
+    sendChatMessage(message: string, inGame: boolean, isWord?: boolean): Promise<any> {
         return new Promise(async function(resolve, reject) {
             // https://stackoverflow.com/a/21797381
             await _this.page.evaluate(function(sockets, wsURL, message) {
@@ -218,7 +219,7 @@ export class Client extends EventEmitter {
                 const bArr = new Uint8Array(bLen);
                 for (var i = 0; i < bLen; i++) bArr[i] = bStr.charCodeAt(i);
                 sockets.find(socket => socket.url === wsURL).send(bArr.buffer);
-            }, _this.sockets, inGame ? _this.gameWS : _this.mainWS, Buffer.from(Buffer.from("AgEyMTI0Mzk3MzI1AA==", "base64").toString("utf8") + message + Buffer.from("AA==", "base64").toString("utf8")).toString("base64")).catch(reject);
+            }, _this.sockets, inGame ? _this.gameWS : _this.mainWS, Buffer.from((isWord ? "\x02\x03" : "\x02\x01") + "\x00" + message + "\x00", "utf8").toString("base64")).catch(reject);
             resolve(true);
         });
     }
